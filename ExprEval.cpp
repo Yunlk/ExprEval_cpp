@@ -3,6 +3,8 @@ using namespace std;
 #define ll long long int
 #define F false
 #define T true
+//const double PI = 3.14159265358979323846;
+//const double E = 2.71828182845904523536;
 
 int op_doing(char op)//优先级
 {
@@ -23,6 +25,15 @@ int op_doing(char op)//优先级
 bool op_is_left(char op)//是左结合运算符吗？
 {
 	return op != '^';
+}
+bool is_other_op(const char& tep)
+{
+	if (tep == 'e')
+		return T;
+	if (tep == 'p')
+		return T;
+	else
+		return F;
 }
 bool op_is_using(char op)
 {
@@ -69,7 +80,28 @@ bool is_minus(const string& expression, int len)//是减号还是负数？
 		return T;
 	return F;
 }
-string read_string(const string& expression, ll& i)
+string read_other_op(const string& expression, ll& i)//<- will using f()
+{
+	string re = "";
+
+	if (expression[i] == 'e')//e
+	{
+		re = "2.71828182845904523536";
+		i++;
+	}
+
+	else if (expression[i] == 'p' && expression.size() > i + 1 && expression[i + 1] == 'i')//pi
+	{
+		re = "3.14159265358979323846";
+		i += 2;
+	}
+
+	//sin,cos,tan,lg,log...
+	//will using f()
+	i--;
+	return re;
+}
+string read_string(const string& expression, ll& i)//表达式处理
 {
 	string num = "";
 	if (expression[i] == '-' && is_minus(expression, i))//负数
@@ -78,6 +110,16 @@ string read_string(const string& expression, ll& i)
 		i++;
 	}
 
+	if (i < expression.size() && is_other_op(expression[i]))
+	{
+		//bool is_f = F;
+		string other = read_other_op(expression, i);//<-
+		//if()
+		if (num == "-")
+			return "-" + other;
+		else
+			return other;
+	}
 	while (i < expression.size() && isdigit(expression[i]))//整数
 	{
 		num += expression[i];
@@ -87,6 +129,7 @@ string read_string(const string& expression, ll& i)
 	{
 		num += '.';
 		i++;
+
 		while(i < expression.size() && isdigit(expression[i]))
 		{
 			num += expression[i];
@@ -107,7 +150,7 @@ vector<string> sol_string(const string& expression)
 		char tep = expression[i];
 		if (tep == ' ')
 			continue;
-		if (isdigit(tep) || (tep == '-' && is_minus(expression, i)))
+		if (isdigit(tep) || (tep == '-' && is_minus(expression, i)) || is_other_op(tep))
 		{
 			string num = read_string(expression, i);
 			p.push_back(num);

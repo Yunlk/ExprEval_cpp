@@ -88,6 +88,7 @@ ExprEval.cpp
 
 ## TODO
 
+- [x] 数学常数e，pi支持
 - [ ] 数学函数：`sin`, `cos`, `sqrt`, `log`, `abs`
 - [ ] 变量定义与赋值
 - [ ] 命令行参数支持：`./ExprEval "1+2*3"`
